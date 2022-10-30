@@ -3,7 +3,11 @@
 namespace RasterisationAlgorithm;
 
 public interface ILineRasterisationAlgorithm {
-    void Draw(Canvas canvas, Line line, Color color) {
+    void Draw(Canvas canvas, Line line, Color color);
+}
+
+public sealed class LevDownAlgorithm : ILineRasterisationAlgorithm {
+    public void Draw(Canvas canvas, Line line, Color color) {
 
         if (line.Start.X < 0 && line.End.X < 0 && line.Start.Y < 0 && line.End.Y < 0) {
             throw new ArgumentOutOfRangeException();
