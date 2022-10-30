@@ -33,7 +33,13 @@ public sealed class DDA : ILineRasterisationAlgorithm {
         while(length > 0) {
             x += dX;
             y += dY;
-            canvas.SetPixel((uint)Math.Round(x), (uint)Math.Round(y), color);
+
+            var  pixel = new Pixel((uint)Math.Round(x), (uint)Math.Round(y));
+
+            if (pixel.X >= canvas.Image.Size.X || pixel.Y >= canvas.Image.Size.Y)
+                break;
+
+            canvas.SetPixel(pixel, color);
 
             length--;
         } 

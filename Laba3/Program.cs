@@ -1,10 +1,7 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using FillAlgorithm;
 using RasterisationAlgorithm;
-using SFML;
 using SFML.Graphics;
-using SFML.System;
 using SFML.Window;
 
 var canvas = new Canvas(160, 160);
