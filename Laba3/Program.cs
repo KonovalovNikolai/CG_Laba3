@@ -14,7 +14,7 @@ Triangle test = new Triangle(ax, ay, bx, by, cx, cy);
 
 var drawer = new Drawer();
 var drawAlgorithm = new DDA();
-var fillAlgorithm = new LineFillAlgorithm();
+var fillAlgorithm = new RA4A();
 
 drawer.Draw(canvas, test, Color.Black, Color.Cyan, drawAlgorithm, fillAlgorithm);
 
