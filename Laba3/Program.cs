@@ -13,8 +13,8 @@ float cx = 150, cy = 150;
 Triangle test = new Triangle(ax, ay, bx, by, cx, cy);
 
 var drawer = new Drawer();
-var drawAlgorithm = new DDA();
-var fillAlgorithm = new RA4A();
+var drawAlgorithm = new SIA();
+var fillAlgorithm = new LineFillAlgorithm();
 
 drawer.Draw(canvas, test, Color.Black, Color.Cyan, drawAlgorithm, fillAlgorithm);
 
@@ -51,9 +51,11 @@ public sealed class Drawer {
             drawAlgorithm.Draw(canvas, line, borderColor);
         }
 
-        int i = 0;
-        foreach (var point in triangle.MiniTriangleMedianPoints()) {
-            fillAlgorithm.Fill(canvas, new((uint)point.X, (uint)point.Y), Colors[i++], borderColor);
+        if (fillAlgorithm is not null) {
+            int i = 0;
+            foreach (var point in triangle.MiniTriangleMedianPoints()) {
+                fillAlgorithm.Fill(canvas, new((uint)point.X, (uint)point.Y), Colors[i++], borderColor);
+            }
         }
 
         foreach (var line in triangle.CentralFigureSides()) {
