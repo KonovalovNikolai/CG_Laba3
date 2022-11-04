@@ -10,17 +10,17 @@ using SFML.Window;
 var canvas = new Canvas(160, 160);
 
 var triangle = new Line[] {
-    new Line(new(75, 0), new(0, 150)),
+    new Line(new(75, 0), new(75, 150)),
     new Line(new(75, 0), new(150, 150)),
-    new Line(new(0, 150), new(150, 150))
+    new Line(new(75, 150), new(150, 150))
 };
 
 var drawer = new Drawer();
-var drawAlgorithm = new DDA();
+var drawAlgorithm = new SIA();
 var fillAlgorithm = new RA4A();
 
 drawer.Draw(canvas, triangle, Color.Black, Color.Cyan, drawAlgorithm, fillAlgorithm);
-fillAlgorithm.Fill(canvas, new(75, 120), Color.Cyan, Color.Black);
+//fillAlgorithm.Fill(canvas, new(75, 120), Color.Cyan, Color.Black);
 
 var texture = new Texture(canvas.Image);
 var sprite = new Sprite(texture);
