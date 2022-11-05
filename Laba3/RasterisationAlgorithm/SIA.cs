@@ -27,8 +27,18 @@ public sealed class SIA : ILineRasterisationAlgorithm
         }
         else
         {
-            double k = 1.0 * (yEndPixel - yStartPixel) / (xEndPixel - xStartPixel);
-            double b = yStartPixel - k * xStartPixel;
+            double k, b;
+
+            if (xEndPixel - xStartPixel != 0)
+            {
+                k = 1.0 * (yEndPixel - yStartPixel) / (xEndPixel - xStartPixel);
+                b = yStartPixel - k * xStartPixel;
+            }
+            else
+            {
+                k = 999999;
+                b = yStartPixel - k * xStartPixel;
+            }
             int flag;
             
             if (width > height)
