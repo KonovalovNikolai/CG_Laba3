@@ -6,66 +6,34 @@ public sealed class SIA : ILineRasterisationAlgorithm
 {
     public void Draw(Canvas canvas, Line line, Color color)
     {
-        if (line.Start.X < 0 && line.End.X < 0 && line.Start.Y < 0 && line.End.Y < 0)
-        {
-            throw new ArgumentOutOfRangeException();
+
+        double tg = Math.Abs((double)(line.End.Y - line.Start.Y) / (line.End.X - line.Start.X));
+
+        if (line.Start.X > line.End.X && tg < 1 || line.End.Y < line.Start.Y && tg >= 1) {
+            line = new Line(new(line.End.X, line.End.Y), new(line.Start.X, line.Start.Y));
         }
 
-        int xStartPixel = (int)MathF.Round(line.Start.X);
-        int yStartPixel = (int)MathF.Round(line.Start.Y);
-        int xEndPixel = (int)MathF.Round(line.End.X);
-        int yEndPixel = (int)MathF.Round(line.End.Y);
+        float A = line.End.Y - line.Start.Y;
+        float B = -line.End.X + line.Start.X;
 
-        int width = Math.Abs(xStartPixel - xEndPixel);
-        int height = Math.Abs(yStartPixel - yEndPixel);
+        double kx = (double)A / (-B);
+        double ky = (double)B / (-A);
 
-        int length = Math.Max(width, height);
+        if (tg < 1 || kx == 0) {
+            double y = line.Start.Y;
 
-        if (length == 0)
-        {
-            canvas.SetPixel((uint)xStartPixel, (uint)yStartPixel, color);
-        }
-        else
-        {
-            double k, b;
-
-            if (xEndPixel - xStartPixel != 0)
-            {
-                k = 1.0 * (yEndPixel - yStartPixel) / (xEndPixel - xStartPixel);
-                b = yStartPixel - k * xStartPixel;
-            }
-            else
-            {
-                k = 999999;
-                b = yStartPixel - k * xStartPixel;
-            }
-            int flag;
-            
-            if (width > height)
-            {
-                int x = xStartPixel;
-                if (xStartPixel > xEndPixel) flag = -1;
-                else flag = 1;
-
-                for (int i = 0; i < length; i++)
-                {
-                    canvas.SetPixel((uint)(x), (uint)Math.Round(k * x + b), color);
-                    x += flag;
-                }
-            }
-            else
-            {
-                int y = yStartPixel;
-                if (yStartPixel > yEndPixel) flag = -1;
-                else flag = 1;
-
-                for (int i = 0; i < length; i++)
-                {
-                    canvas.SetPixel((uint)Math.Round((y - b) / k), (uint)(y), color);
-                    y += flag;
-                }
+            for (double x = line.Start.X; x <= line.End.X; x++) {
+                canvas.SetPixel((uint)x, (uint)y, color);
+                y += kx;
             }
         }
-        
+        else {
+            double x = line.Start.X;
+
+            for (double y = line.Start.Y; y <= line.End.Y; y++) {
+                canvas.SetPixel((uint)x, (uint)y, color);
+                x += ky;
+            }
+        }
     }
 }

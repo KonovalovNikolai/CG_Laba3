@@ -11,38 +11,39 @@ public sealed class LineFillAlgorithm : IFillAlgorithm {
 
         while (stack.Count > 0) {
             var stackPixel = stack.Pop();
+            uint y = stackPixel.Y;
 
             canvas.SetPixel(stackPixel, fillColor);
 
-            var rPixel = RightPixel(stackPixel);
-            var pixelColor = canvas.GetPixel(rPixel);
+            uint rX = stackPixel.X + 1;
+            var pixelColor = canvas.GetPixel(rX, y);
             while (pixelColor == startColor) {
-                canvas.SetPixel(rPixel, fillColor);
+                canvas.SetPixel(rX, y, fillColor);
 
-                if (rPixel.X >= canvas.Image.Size.X)
+                if (rX >= canvas.Image.Size.X)
                     break;
 
-                rPixel = RightPixel(rPixel);
-                pixelColor = canvas.GetPixel(rPixel);
+                rX += 1;
+                pixelColor = canvas.GetPixel(rX, y);
             }
 
-            var lPixel = LeftPixel(stackPixel);
-            pixelColor = canvas.GetPixel(lPixel);
+            uint lX = stackPixel.X - 1;
+            pixelColor = canvas.GetPixel(lX, y);
             while (pixelColor == startColor) {
-                canvas.SetPixel(lPixel, fillColor);
+                canvas.SetPixel(lX, y, fillColor);
 
-                if (lPixel.X == 0)
+                if (lX == 0)
                     break;
 
-                lPixel = LeftPixel(lPixel);
-                pixelColor = canvas.GetPixel(lPixel);
+                lX -= 1;
+                pixelColor = canvas.GetPixel(lX, y);
             }
 
             if (stackPixel.Y < canvas.Image.Size.Y)
-                Scan(canvas, stackPixel.Y + 1, lPixel.X + 1, rPixel.X - 1, stack, fillColor, startColor);
+                Scan(canvas, stackPixel.Y + 1, lX + 1, rX - 1, stack, fillColor, startColor);
 
             if (stackPixel.Y > 0)
-                Scan(canvas, stackPixel.Y - 1, lPixel.X + 1, rPixel.X - 1, stack, fillColor, startColor);
+                Scan(canvas, stackPixel.Y - 1, lX + 1, rX - 1, stack, fillColor, startColor);
         }
 
     }
@@ -60,13 +61,5 @@ public sealed class LineFillAlgorithm : IFillAlgorithm {
             stack.Push(new Pixel(x, y));
             return;
         }
-    }
-
-    Pixel RightPixel(Pixel pixel) {
-        return new(pixel.X + 1, pixel.Y);
-    }
-
-    Pixel LeftPixel(Pixel pixel) {
-        return new(pixel.X - 1, pixel.Y);
     }
 }

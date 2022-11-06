@@ -28,6 +28,10 @@ public class Triangle {
         //Console.WriteLine(m_Cross.X + "  " + m_Cross.Y);
     }
 
+    public Triangle (float lenght, float height) : this(0, height, lenght / 2, 0, lenght, height) {
+
+    }
+
     private Vector2 CalcMedian(Vector2 point1, Vector2 point2) {
         return new Vector2((point1.X + point2.X) / 2, (point1.Y + point2.Y) / 2);
     }

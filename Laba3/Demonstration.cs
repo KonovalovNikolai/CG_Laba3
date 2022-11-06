@@ -4,8 +4,8 @@ using SFML.Window;
 
 class Demonstration {
     public void Run() {
-        var canvasA = new Canvas(160, 160);
-        var canvasB = new Canvas(160, 160);
+        var canvasA = new Canvas(500, 500);
+        var canvasB = new Canvas(500, 500);
 
         var drawAlgorithmA = new SIA();
         var fillAlgorithmA = new RA4A();
@@ -37,10 +37,7 @@ class Demonstration {
         var drawerA = new Drawer(drawAlgorithmA, fillAlgorithmA, fillColorsA);
         var drawerB = new Drawer(drawAlgorithmB, fillAlgorithmB, fillColorsB);
 
-        float ax = 0, ay = 150;
-        float bx = 75, by = 0;
-        float cx = 150, cy = 150;
-        Triangle triangle = new Triangle(ax, ay, bx, by, cx, cy);
+        Triangle triangle = new Triangle(100, 150);
 
         drawerA.Draw(canvasA, triangle, borderColorA);
         drawerB.Draw(canvasB, triangle, borderColorB);

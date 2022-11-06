@@ -6,26 +6,39 @@ public sealed class RA4A : IFillAlgorithm
     public void Fill(Canvas canvas, Pixel startPixel, Color fillColor)
     {
         Color startColor = canvas.GetPixel(startPixel);
-        Fill(canvas, startPixel, fillColor, startColor);
-    }
 
-    private void Fill(Canvas canvas, Pixel startPixel, Color fillColor, Color startColor) {
-        var pixelColor = canvas.GetPixel(startPixel);
-        if (pixelColor == fillColor || pixelColor != startColor)
-            return;
+        var stack = new Stack<Pixel>();
+        stack.Push(startPixel);
 
-        canvas.SetPixel(startPixel, fillColor);
-        var nPixel = (Pixel)new(startPixel.X + 1, startPixel.Y);
-        Fill(canvas, nPixel, fillColor, startColor);
+        while (stack.Count > 0) {
+            startPixel = stack.Pop();
 
-        nPixel = (Pixel)new(startPixel.X - 1, startPixel.Y);
-        Fill(canvas, nPixel, fillColor, startColor);
+            var pixelColor = canvas.GetPixel(startPixel);
+            if (pixelColor == fillColor || pixelColor != startColor)
+                continue;
 
-        nPixel = (Pixel)new(startPixel.X, startPixel.Y + 1);
-        Fill(canvas, nPixel, fillColor, startColor);
+            canvas.SetPixel(startPixel, fillColor);
 
-        nPixel = (Pixel)new(startPixel.X, startPixel.Y - 1);
-        Fill(canvas, nPixel, fillColor, startColor);
+            if (startPixel.X + 1 < canvas.Image.Size.X) {
+                Pixel nPixel = new(startPixel.X + 1, startPixel.Y);
+                stack.Push(nPixel);
+            }
+
+            if (startPixel.X != 0) {
+                Pixel nPixel = new(startPixel.X - 1, startPixel.Y);
+                stack.Push(nPixel);
+            }
+
+            if (startPixel.Y < canvas.Image.Size.Y) {
+                Pixel nPixel = new(startPixel.X, startPixel.Y + 1);
+                stack.Push(nPixel);
+            }
+
+            if (startPixel.Y != 0) {
+                Pixel nPixel = new(startPixel.X, startPixel.Y - 1);
+                stack.Push(nPixel);
+            }
+        }
     }
 }
 
